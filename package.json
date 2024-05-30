@@ -7,6 +7,7 @@
     "start": "next start",
     "db:pull": "drizzle-kit introspect",
     "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
     "lint": "eslint --cache --ext \".js,.ts,.tsx\" src",
     "lint-fix": "bun lint --fix",
     "test-unit": "vitest",

@@ -16,7 +16,8 @@ import { useSession } from '~/app/sessions.tsx';
 import { AppContext, AppStoreProps } from '~/store.ts';
 import { useStore } from 'zustand';
 import { toast } from 'sonner';
-import { useRouter } from 'next/router';
+import { useRouter } from "next/navigation";
+import { LoaderCircle } from 'lucide-react';
 
 // export default function SignIn() {
 //   const session = useSession();
@@ -235,7 +236,6 @@ export default function LoginPage() {
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
   const router = useRouter();
 
-
   const form = useForm<LoginData>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -319,7 +319,7 @@ export default function LoginPage() {
                         <FormDescription>
                           Nous enverrons un email de confirmation à cette adresse.
                         </FormDescription>
-                        <FormMessage/>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -338,7 +338,7 @@ export default function LoginPage() {
                                  disabled={isLoading}
                                  {...field} />
                         </FormControl>
-                        <FormMessage/>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -377,16 +377,25 @@ export default function LoginPage() {
                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     {isLoading && (
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     Créer un compte
                   </Button>
+                </div>
+
+                <div className="text-sm text-center leading-6 my-2">
+                  <Link
+                    href="/inscription"
+                    className="font-normal text-indigo-600 hover:text-indigo-500"
+                  >
+                    Vous n'avez pas de compte ? Créer un compte
+                  </Link>
                 </div>
               </form>
             </Form>
 
             <div>
-              <div className="relative mt-10">
+              <div className="relative mt-2">
                 <div
                   className="absolute inset-0 flex items-center"
                   aria-hidden="true"

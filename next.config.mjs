@@ -15,6 +15,8 @@ const config = {
   experimental: {
     optimizePackageImports: [
       "@headlessui/react",
+      "@heroicons/react",
+      "lucide-react",
     ],
   },
 }

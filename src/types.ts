@@ -17,9 +17,10 @@ export type AppProps = {
     LOGO: string;
     MAIN_NAV: {
       title: string;
-      children: {
+      href?: string;
+      children?: {
         title: string;
-        href: string;
+        href?: string;
         description: string;
         items: any[];
       }[];

@@ -93,21 +93,8 @@ export const createAppStore = (initProps?: Partial<AppProps>) => {
           ],
         },
         {
-          title: "Listes",
-          children: [
-            {
-              title: "Filmographies",
-              href: "/filmographies",
-              description: "Browse all the filmographies we have.",
-              items: [],
-            },
-            {
-              title: "TV Series Lists",
-              href: "/tv-series-lists",
-              description: "Browse all the TV series lists we have.",
-              items: [],
-            },
-          ],
+          title: "Test route",
+          href: "/test",
         }
       ],
 

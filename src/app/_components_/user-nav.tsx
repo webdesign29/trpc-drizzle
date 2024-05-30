@@ -17,7 +17,7 @@ export function UserNav() {
 	const { data: session } = useSession();
 	const router = useRouter();
 
-	const name = `${session?.user?.first_name} ${session?.user?.last_name}`;
+	const name = `${session?.user?.name}`;
 
 	return (
 		<DropdownMenu>
@@ -26,7 +26,7 @@ export function UserNav() {
 					<Avatar className="h-8 w-8">
 						<AvatarImage src={session?.user?.image ?? "#"} alt={name} />
 						<AvatarFallback>
-							{(session?.user?.first_name[0] || "A" + session?.user?.last_name[0] || "N")?.toUpperCase()}
+							{(name[0])?.toUpperCase()}
 						</AvatarFallback>
 					</Avatar>
 				</Button>
@@ -35,14 +35,14 @@ export function UserNav() {
 				<DropdownMenuLabel className="font-normal">
 					<div className="flex flex-col space-y-1">
 						<p className="text-sm font-medium leading-none">
-							{session?.user?.first_name || "Anonymous"}
+							{session?.user?.name || "Anonymous"}
 						</p>
 						<p className="text-xs leading-none text-muted-foreground">
 							{session?.user?.email || ""}
 						</p>
-						{session?.user?.role?.name && <div>
+						{session?.user?.role && <div>
 							<Badge>
-								{session?.user?.role?.name}
+								{session?.user?.role}
 							</Badge>
 						</div>}
 					</div>

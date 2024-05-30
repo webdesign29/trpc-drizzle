@@ -1,82 +1,70 @@
-# Prisma + tRPC
+# Next.js + Drizzle + tRPC
 
-## Features
+## Fonctionnalités
 
-- 🧙‍♂️ E2E typesafety with [tRPC](https://trpc.io)
-- ⚡ Full-stack React with Next.js
-- ⚡ Database with Drizzle
-- ⚙️ VSCode extensions
+- 🧙‍♂️ Sécurité des types de bout en bout avec [tRPC](https://trpc.io)
+- ⚡ React full-stack avec Next.js
+- ⚡ Base de données avec Drizzle
+- ⚙️ Extensions VSCode
 - 🎨 ESLint + Prettier
-- 💚 CI setup using GitHub Actions:
-  - ✅ E2E testing with [Playwright](https://playwright.dev/)
+- 💚 Configuration CI avec GitHub Actions :
+  - ✅ Tests de bout en bout avec [Playwright](https://playwright.dev/)
   - ✅ Linting
-- 🔐 Validates your env vars on build and start
+- 🔐 Validation de vos variables d'environnement à la compilation et au démarrage
 
-## Setup
+## Clone + Installation
+
+Clonez le projet et installez les dépendances :
 
 ```bash
+git clone https://github.com/webdesign29/trpc-drizzle.git
+cd trpc-drizzle
 bun install
+
+# Copier le fichier .env.example vers un fichier .env.local à la racine du projet
+# et configurez les variables d'environnement
+
+cp .env.example .env.local
 ```
 
-### Requirements
+### Prérequis
 
-- Node >= 18.0.0
+- Node >= 20.0.0
 - Postgres
 
-## Development
+## Développement
 
-### Start project
+### Démarrer le projet
 
 ```bash
 bun run dev
 ```
 
-### Commands
+### Commandes
 
 ```bash
-bun build      # runs `prisma generate` + `prisma migrate` + `next build`
-bun db-reset   # resets local db
-bun dev        # starts next.js
-bun dx         # starts postgres db + runs migrations + seeds + starts next.js
-bun test-dev   # runs e2e tests on dev
-bun test-start # runs e2e + unit tests
-bun test-unit  # runs normal Vitest unit tests
-bun test-e2e   # runs e2e tests
+bun build      # exécute `prisma generate` + `prisma migrate` + `next build`
+bun db-reset   # réinitialise la base de données locale
+bun dev        # démarre next.js
+bun dx         # démarre la base de données postgres + exécute les migrations + initialise les données + démarre next.js
+bun test-dev   # exécute les tests de bout en bout en mode développement
+bun test-start # exécute les tests de bout en bout + les tests unitaires
+bun test-unit  # exécute les tests unitaires avec Vitest
+bun test-e2e  
 ```
 
-## Deployment
+## Utilisation des modules :
 
-### Using [Render](https://render.com/)
+Utilisation de tRPC :
 
-The project contains a [`render.yaml`](./render.yaml) [_"Blueprint"_](https://render.com/docs/blueprint-spec) which makes the project easily deployable on [Render](https://render.com/).
+```tsx
+// Coté serveur
+import { api } from '~/trpc/server';
 
-Go to [dashboard.render.com/blueprints](https://dashboard.render.com/blueprints) and connect to this Blueprint and see how the app and database automatically gets deployed.
+const dataRaw = await api.example.getAll();
 
-## Files of note
+// Coté client
+import { api } from '~/trpc/react';
 
-<table>
-  <thead>
-    <tr>
-      <th>Path</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="./prisma/schema.prisma"><code>./prisma/schema.prisma</code></a></td>
-      <td>Prisma schema</td>
-    </tr>
-    <tr>
-      <td><a href="./src/pages/api/trpc/[trpc].ts"><code>./src/pages/api/trpc/[trpc].ts</code></a></td>
-      <td>tRPC response handler</td>
-    </tr>
-    <tr>
-      <td><a href="./src/server/routers"><code>./src/server/routers</code></a></td>
-      <td>Your app's different tRPC-routers</td>
-    </tr>
-  </tbody>
-</table>
-
----
-
-Created by [@alexdotjs](https://twitter.com/alexdotjs).
+const { data, isLoading, refetch } = api.example.getAll.useQuery();
+```
