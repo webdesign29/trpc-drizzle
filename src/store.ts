@@ -19,6 +19,13 @@ export const createAppStore = (initProps?: Partial<AppProps>) => {
     ...initialState,
     APP: {
       NAME: "App Name",
+      setName: (name: string) => set((state) => ({ APP: { ...state.APP, NAME: name } })),
+      URL: "https://example.com",
+      THEME: {
+        // LOGIN_BG: ,
+      },
+      BRAND: "Brand",
+      LOGO: "Logo",
       ...initProps?.APP,
       // ...stateOverrideApp
     },

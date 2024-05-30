@@ -1,5 +1,5 @@
-import React from "react";
-import { default as RegisterPage } from "../_components_/register/index";
+import React from 'react';
+import { default as RegisterPage } from '../_components_/register/index';
 
 const Page = () => {
   return <RegisterPage />;

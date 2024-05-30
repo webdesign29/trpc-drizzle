@@ -7,11 +7,11 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from "@trpc/server";
-import { type NextRequest } from "next/server";
-import { getServerAuthSession } from "~/server/auth";
-import trpcOptions from "./trpc-options";
-import { type NextApiRequest } from "next";
+import { initTRPC, TRPCError } from '@trpc/server';
+import { type NextRequest } from 'next/server';
+import trpcOptions from './trpc-options';
+import { Session } from 'next-auth';
+import { auth } from '~/server/auth.ts';
 
 /**
  * 1. CONTEXT
@@ -53,13 +53,18 @@ interface CreateContextOptions {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: { headers: Headers, app: string | null, host: string }) => {
-  const session = await getServerAuthSession();
+export const createTRPCContext = async (opts: {
+  headers: Headers;
+  app?: string | null;
+  host?: string;
+  session: Session | null;
+}) => {
+  const session = opts.session ?? (await auth());
 
   return {
     // db,
-    session,
     ...opts,
+    session,
   };
 };
 
@@ -72,6 +77,13 @@ export const createTRPCContext = async (opts: { headers: Headers, app: string | 
  */
 
 const t = initTRPC.context<typeof createTRPCContext>().create(trpcOptions);
+
+/**
+ * Create a server-side caller
+ * @see https://trpc.io/docs/server/server-side-calls
+ */
+export const createCallerFactory = t.createCallerFactory;
+
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
@@ -106,7 +118,7 @@ export const publicProcedure = t.procedure;
  */
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
   return next({
     ctx: {

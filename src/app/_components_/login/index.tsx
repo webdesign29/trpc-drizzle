@@ -1,25 +1,23 @@
-"use client";
-import { useContext, useEffect, useState } from "react";
-import { signIn, getCsrfToken, getProviders } from "next-auth/react";
-import { Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { useSession } from "../../../app/sessions";
-import { toast } from "sonner";
-import { AppContext, type AppStoreProps } from "~/store";
-import { useStore } from "zustand";
+'use client';
+import React, { useContext, useEffect, useState } from 'react';
+import { getCsrfToken, getProviders, signIn } from 'next-auth/react';
+import { ErrorMessage, Field, Formik } from 'formik';
+import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useSession } from '~/app/sessions.tsx';
+import { toast } from 'sonner';
+import { AppContext, type AppStoreProps } from '~/store';
+import { useStore } from 'zustand';
 
 export default function SignIn({ csrfToken, params }: any) {
   const session = useSession();
   const router = useRouter();
-  const [error, setError] = useState(null);
-  const [redirectUrl, setRedirectUrl] = useState("/");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [ error, setError ] = useState(null);
+  const [ redirectUrl, setRedirectUrl ] = useState('/');
+  const [ isPasswordVisible, setIsPasswordVisible ] = useState(false);
   const store = useContext(AppContext);
-  if (!store) throw new Error("Missing AppContext.Provider in the tree");
+  if (!store) throw new Error('Missing AppContext.Provider in the tree');
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
 
   function togglePasswordVisibility(e) {
@@ -29,29 +27,29 @@ export default function SignIn({ csrfToken, params }: any) {
 
   useEffect(() => {
     const url = new URL(location.href);
-    setRedirectUrl(url.searchParams.get("callbackUrl")!);
-    if (session?.data?.user.role && session?.data?.user.role !== "guest") {
-      console.log("Logged in as", session.data.user);
-      toast.success("Vous êtes connecté.", {
+    setRedirectUrl(url.searchParams.get('callbackUrl')!);
+    if (session?.data?.user?.role !== 'guest') {
+      console.log('Logged in as', session.data?.user);
+      toast.success('Vous êtes connecté.', {
         duration: 1000,
       });
-      void router.push(redirectUrl ? redirectUrl : "/");
+      void router.push(redirectUrl ? redirectUrl : '/');
     }
-  }, [session]);
+  }, [ session ]);
 
   return (
     <>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: '', password: '' }}
         validationSchema={Yup.object({
           email: Yup.string()
-            .max(60, "Doit contenir 60 caractères maximum")
-            .email("Email invalide")
-            .required("Veuillez saisir votre identifiant de connexion"),
-          password: Yup.string().required("Veuillez saisir votre mot de passe"),
+            .max(60, 'Doit contenir 60 caractères maximum')
+            .email('Email invalide')
+            .required('Veuillez saisir votre identifiant de connexion'),
+          password: Yup.string().required('Veuillez saisir votre mot de passe'),
         })}
         onSubmit={async (values, { setSubmitting }) => {
-          const res: any = await signIn("credentials", {
+          const res: any = await signIn('credentials', {
             redirect: false,
             email: values.email,
             password: values.password,
@@ -64,7 +62,7 @@ export default function SignIn({ csrfToken, params }: any) {
             setError(null);
           }
           if (res.url) {
-            if (res.url.includes("/api/auth/signin")) {
+            if (res.url.includes('/api/auth/signin')) {
               res.url = redirectUrl ? redirectUrl : appStore.URL;
             }
             session.refetch();
@@ -76,7 +74,7 @@ export default function SignIn({ csrfToken, params }: any) {
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <div
-              className={`flex min-h-screen flex-col items-center px-6 pt-24 ${appStore.THEME.LOGIN_BG ? appStore.THEME.LOGIN_BG : "bg-primary"}`}
+              className={`flex min-h-screen flex-col items-center px-6 pt-24 ${appStore.THEME?.LOGIN_BG ? appStore.THEME.LOGIN_BG : 'bg-primary'}`}
             >
               {/* <h1 className="font-extrabold tracking-tight text-white sm:text-[3rem] mb-4">
                     Pro <span className="text-[#5ba314]">Bio</span> Terre
@@ -135,7 +133,7 @@ export default function SignIn({ csrfToken, params }: any) {
                         aria-label="enter your password"
                         aria-required="true"
                         // type="password"
-                        type={isPasswordVisible ? "text" : "password"}
+                        type={isPasswordVisible ? 'text' : 'password'}
                         className="mt-2 w-full rounded-sm bg-slate-100 p-3 text-gray-900"
                       />
                       <button
@@ -207,7 +205,7 @@ export default function SignIn({ csrfToken, params }: any) {
                         // className="w-full rounded-lg bg-primary p-3 text-gray-100"
                         className="w-full rounded-lg bg-primary p-3 text-center text-sm font-medium text-white hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:bg-primary dark:hover:bg-primary/80 dark:focus:ring-primary/80"
                       >
-                        {formik.isSubmitting ? "Veuillez patienter..." : "Se connecter"}
+                        {formik.isSubmitting ? 'Veuillez patienter...' : 'Se connecter'}
                       </button>
                     </div>
                   </>

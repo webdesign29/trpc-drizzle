@@ -9,6 +9,12 @@ export enum Theme {
 export type AppProps = {
   APP: {
     NAME: string;
+    URL: string;
+    THEME: {
+      LOGIN_BG?: string;
+    };
+    BRAND: string;
+    LOGO: string;
   };
 };
 
@@ -56,34 +62,34 @@ type ZodRawShape<T> = {
   [K in keyof T]: T[K] extends ZodTypeAny ? T[K] : never;
 };
 
-// Function to generate Zod schema and its raw shape from Prisma type
-export function generateZodSchema<T>(
-  prismaType: T
-): { schema: ZodObject<ZodRawShape<T>>, shape: ZodRawShape<T> } {
-  const schema: Partial<ZodRawShape<T>> = {};
-  for (const key in prismaType) {
-    const field = prismaType[key];
-    if (typeof field === 'object' && field !== null && !Array.isArray(field)) {
-      // Assuming all fields are required
-      if (field.isRequired) {
-        schema[key as keyof T] = z.string(); // You can add more sophisticated handling based on field types
-      }
-    }
-  }
-  return { schema: z.object(schema) as z.ZodObject<ZodRawShape<T>>, shape: schema as ZodRawShape<T> };
-}
-
-export function cleanUpSchema<T extends z.ZodTypeAny>(schema: T): T {
-  if (schema instanceof z.ZodObject) {
-    const cleanedShape = Object.fromEntries(
-      Object.entries(schema.shape).map(([key, value]) => {
-        if (value instanceof z.ZodObject) {
-          return [key, cleanUpSchema(value)];
-        }
-        return [key, value];
-      })
-    );
-    return schema.shape === cleanedShape ? schema : new z.ZodObject(cleanedShape, schema.unknownKeys, schema.catchall);
-  }
-  return schema;
-}
+// // Function to generate Zod schema and its raw shape from Prisma type
+// export function generateZodSchema<T>(
+//   prismaType: T
+// ): { schema: ZodObject<ZodRawShape<T>>, shape: ZodRawShape<T> } {
+//   const schema: Partial<ZodRawShape<T>> = {};
+//   for (const key in prismaType) {
+//     const field = prismaType[key];
+//     if (typeof field === 'object' && field !== null && !Array.isArray(field)) {
+//       // Assuming all fields are required
+//       if (field.isRequired) {
+//         schema[key as keyof T] = z.string(); // You can add more sophisticated handling based on field types
+//       }
+//     }
+//   }
+//   return { schema: z.object(schema) as z.ZodObject<ZodRawShape<T>>, shape: schema as ZodRawShape<T> };
+// }
+//
+// export function cleanUpSchema<T extends z.ZodTypeAny>(schema: T): T {
+//   if (schema instanceof z.ZodObject) {
+//     const cleanedShape = Object.fromEntries(
+//       Object.entries(schema.shape).map(([key, value]) => {
+//         if (value instanceof z.ZodObject) {
+//           return [key, cleanUpSchema(value)];
+//         }
+//         return [key, value];
+//       })
+//     );
+//     return schema.shape === cleanedShape ? schema : new z.ZodObject(cleanedShape, schema.unknownKeys, schema.catchall);
+//   }
+//   return schema;
+// }

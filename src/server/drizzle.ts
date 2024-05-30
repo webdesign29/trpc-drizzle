@@ -2,9 +2,9 @@ export { drizzle } from "drizzle-orm/postgres-js";
 export * as schema from "../../drizzle/schema";
 import postgres from "postgres";
 
-const connectionString = process.env.MAIN_PG_CONNECTION_STRING;
+const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
-  throw new Error("MAIN_PG_CONNECTION_STRING is not defined");
+  throw new Error("DATABASE_URL is not defined");
 }
 const client = postgres(connectionString);
 

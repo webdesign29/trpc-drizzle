@@ -1,16 +1,16 @@
-"use client";
-import { useEffect, useContext } from "react";
-import Hamburger from "hamburger-react";
-import { useSession } from "../../../sessions";
-import { Button } from "@/components/ui/button";
-import { can } from "~/utils/roles";
-import { LoginBtn, LogoutBtn, ProfileBlock, SiteLogo } from "./fragments";
-import { UserSwitcher } from "../../../../components/ui/header/load-user-switcher";
-import DropDownMenu from "../../../../components/ui/header/dropdown";
-import Notifications from "../../../../components/ui/header/notifications";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useStore } from "zustand";
-import { AppContext, type AppStoreProps } from "~/store";
+'use client';
+import { useContext, useEffect } from 'react';
+import Hamburger from 'hamburger-react';
+import { useSession } from '../../../sessions';
+import { Button } from '~/components/ui/button';
+import { can } from '~/utils/roles';
+import { LoginBtn, LogoutBtn, ProfileBlock, SiteLogo } from './fragments';
+import { UserSwitcher } from '../../../../components/ui/header/load-user-switcher';
+import DropDownMenu from '../../../../components/ui/header/dropdown';
+import Notifications from '../../../../components/ui/header/notifications';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useStore } from 'zustand';
+import { AppContext, type AppStoreProps } from '~/store';
 
 export default function Header({
   menuPositionAbsolute = false,
@@ -18,7 +18,7 @@ export default function Header({
   menuPositionAbsolute?: boolean;
 }) {
   const store = useContext(AppContext);
-  if (!store) throw new Error("Missing AppContext.Provider in the tree");
+  if (!store) throw new Error('Missing AppContext.Provider in the tree');
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
 
   const pathname = usePathname();
@@ -30,28 +30,28 @@ export default function Header({
     if (!session) {
       refetch();
     }
-  }, [refetch, session]);
+  }, [ refetch, session ]);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     const url = `${pathname}?${searchParams}`;
     console.log(url);
-  }, [pathname, searchParams]);
+  }, [ pathname, searchParams ]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "m" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'm' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setMobileMenuOpen(!mobileMenuOpen);
       }
     };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, [mobileMenuOpen, setMobileMenuOpen]);
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, [ mobileMenuOpen, setMobileMenuOpen ]);
 
   return (
     <header
-      className={`z-30 bg-white ${menuPositionAbsolute ? "absolute w-full" : appStore.HEADER_FIXED ? "fixed top-0 w-full" : "relative"} `}
+      className={`z-30 bg-white ${menuPositionAbsolute ? 'absolute w-full' : appStore.HEADER_FIXED ? 'fixed top-0 w-full' : 'relative'} `}
     >
       <nav
         className="mx-auto flex h-16 items-center justify-between pl-2 shadow-lg lg:px-8"
@@ -66,14 +66,15 @@ export default function Header({
           {session ? (
             <>
               <Button
-                variant={"outline"}
+                variant={'outline'}
                 className="relative z-50 p-2 pr-0"
                 onClick={() => {
                   setMobileMenuOpen(!mobileMenuOpen);
                 }}
               >
                 <span className="sr-only">Open menu</span>
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 whitespace-nowrap rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                <kbd
+                  className="pointer-events-none inline-flex h-5 select-none items-center gap-1 whitespace-nowrap rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                   <span className="text-xs">ctrl +</span>m
                 </kbd>
                 <Hamburger
@@ -160,7 +161,7 @@ export const RightSideHeader = ({
   LoginBtnClasses?: string;
 }) => {
   const store = useContext(AppContext);
-  if (!store) throw new Error("Missing AppContext.Provider in the tree");
+  if (!store) throw new Error('Missing AppContext.Provider in the tree');
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
   const notificationsVisible = appStore.NOTIFICATIONS_MENU?.visible;
   const settingsMenuVisible = appStore.SETTINGS_MENU?.visible;
@@ -170,11 +171,11 @@ export const RightSideHeader = ({
   menu = menu ?? true;
   return (
     <div
-      className={`flex flex-1 items-center justify-end gap-x-2 transition-all duration-300  ${isLoading ? "opacity-0" : "opacity-100"
-        }`}
+      className={`flex flex-1 items-center justify-end gap-x-2 transition-all duration-300  ${isLoading ? 'opacity-0' : 'opacity-100'
+      }`}
     >
       {AdminMenuVisible ? <span className="hidden md:block">
-        {can(session, "canSwitchUser") ? <UserSwitcher /> : null}
+        {can(session, 'canSwitchUser') ? <UserSwitcher /> : null}
       </span> : null}
 
       {/* Cart // TODO: display cart again */}
@@ -200,7 +201,7 @@ export const RightSideHeader = ({
             {menu && notificationsVisible ? <Notifications /> : null}
             {ProfileBlockVisible ? <ProfileBlock
               session={session}
-              link={appStore.MODE === "sass-links" ? false : true}
+              link={appStore.MODE === 'sass-links' ? false : true}
               variant="small"
               className="mr-2"
             /> : null}

@@ -5,5 +5,5 @@ export default function LoggedIn() {
         Vous êtes connecté
       </div>
     </div>
-  )
+  );
 }

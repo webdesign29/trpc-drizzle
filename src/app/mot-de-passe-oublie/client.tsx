@@ -1,16 +1,16 @@
-"use client";
-import { FormEvent, useState } from "react";
+'use client';
+import { FormEvent, useState } from 'react';
 
 export default function Page() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [ email, setEmail ] = useState('');
+  const [ error, setError ] = useState('');
+  const [ success, setSuccess ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
     setSuccess(false);
     // try {
     //   await firebase.auth().sendPasswordResetEmail(email);

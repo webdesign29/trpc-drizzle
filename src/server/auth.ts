@@ -1,10 +1,8 @@
-import { getServerSession, type NextAuthOptions, type DefaultSession } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { DrizzleAdapter } from "@auth/drizzle-adapter"
-import bcrypt from "bcryptjs";
-import { type GetServerSidePropsContext } from "next";
-import { db } from "~/db";
-// const bcrypt = require("bcrypt");
+import NextAuth, { type DefaultSession } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import bcrypt from 'bcryptjs';
+import { db } from 'src/server/db';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -12,12 +10,12 @@ import { db } from "~/db";
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
       role: string;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 
   interface User {
@@ -27,12 +25,12 @@ declare module "next-auth" {
   }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
   // callbacks: {
   //   session({ session, user }) {
   //     if (session.user) {
@@ -44,8 +42,8 @@ export const authOptions: NextAuthOptions = {
   //   },
   // },
   pages: {
-    signIn: "/login",
-    newUser: "/inscription",
+    signIn: '/login',
+    newUser: '/inscription',
   },
   callbacks: {
     session({ session, token }) {
@@ -74,8 +72,8 @@ export const authOptions: NextAuthOptions = {
             //@ts-ignore
             return role.name;
           })
-          .join(";");
-        token.role = token.role || "user";
+          .join(';');
+        token.role = token.role || 'user';
       }
       return token;
     },
@@ -83,26 +81,26 @@ export const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Username", type: "text", placeholder: "" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Username', type: 'text', placeholder: '' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log("Login", { credentials });
+        console.log('Login', { credentials });
         const user = {
-          id: "1",
-          name: "J Smith",
-          email: "",
-          password: "$2a$10$3Q7Z6z1",
-          roles: [{ name: "user" }],
-        }
+          id: '1',
+          name: 'J Smith',
+          email: '',
+          password: '$2a$10$3Q7Z6z1',
+          roles: [ { name: 'user' } ],
+        };
         // const user = await db.query.user.findUnique({});
 
         // const user = { id: "1", name: "J Smith", email: "jsmith@example.com", roles: ["user"] }
         // return user;
         if (!user) {
-          throw new Error("No user found");
+          throw new Error('No user found');
         }
 
         // if (process.env.npm_execpath?.includes('bun')) {
@@ -118,19 +116,17 @@ export const authOptions: NextAuthOptions = {
           credentials?.password as string,
           user.password as string,
         );
-        console.log("passwordMatch", passwordMatch);
-        console.log("Supplied", {
+        console.log('passwordMatch', passwordMatch);
+        console.log('Supplied', {
           password: credentials?.password as string,
           hash: user.password as string,
         });
-        // const passwordMatch = true
         if (!passwordMatch) {
-          throw new Error("Invalid password");
+          throw new Error('Invalid password');
         }
-        // }
         return {
           ...user,
-          role: user.roles.map((role) => role.name).join(";"),
+          role: user.roles.map((role) => role.name).join(';'),
         };
       },
     }),
@@ -144,33 +140,12 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      **/
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-};
-
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-// export const getServerAuthSession = (ctx: {
-//   req: GetServerSidePropsContext["req"];
-//   res: GetServerSidePropsContext["res"];
-// }) => {
-//   console.log("getServerAuthSession", ctx.req, ctx.res);
-//   return getServerSession(ctx.req, ctx.res, authOptions);
-// };
-
-export const getServerAuthSession = () => getServerSession(authOptions);
-// export const getServerAuthSession = (ctx: {
-//   req: GetServerSidePropsContext["req"];
-//   res: GetServerSidePropsContext["res"];
-// }) => {
-//   return getServerSession(ctx.req, ctx.res, authOptions);
-// };
+});

@@ -1,22 +1,13 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { DisplayFormErrors } from "../display-errors";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod/dist/zod";
+'use client';
+import Link from 'next/link';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '~/components/ui/form';
+import { DisplayFormErrors } from '../display-errors';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod/dist/zod';
 
-import { z } from "zod";
+import { z } from 'zod';
 
 export const FormSchema = z.object({
   username: z.string().min(3).max(20),
@@ -29,7 +20,7 @@ export default function Page() {
   });
 
   async function onSubmit(data: z.input<typeof FormSchema>) {
-    console.log("data", data);
+    console.log('data', data);
     // const res = await doExport.mutateAsync(data);
     // if (res) {
     //   toast.info("Données en cours d'export", {
@@ -42,6 +33,7 @@ export default function Page() {
     //   }
     // }
   }
+
   return (
     <>
       {/*
@@ -85,7 +77,7 @@ export default function Page() {
                             placeholder="Saisissez votre adresse email"
                             {...field}
                             autoComplete="email"
-                            value={field?.value || ""}
+                            value={field?.value || ''}
                           />
                         </FormControl>
 
@@ -103,7 +95,7 @@ export default function Page() {
                             placeholder="**********"
                             autoComplete="current-password"
                             {...field}
-                            value={field?.value || ""}
+                            value={field?.value || ''}
                           />
                         </FormControl>
 

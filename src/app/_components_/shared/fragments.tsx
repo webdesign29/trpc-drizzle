@@ -1,19 +1,18 @@
-import ShoppingBagIcon from "@heroicons/react/24/outline/ShoppingBagIcon";
-import UserCircleIcon from "@heroicons/react/24/outline/UserCircleIcon";
-import { Button } from "@/components/ui/button";
-import { signOut, signIn } from "next-auth/react";
-import Link from "next/link";
-import Image from "next/image";
-import { cn, removeTrailingSlashes } from "@/lib/utils";
-import { useContext } from "react";
-import { useStore } from "zustand";
-import { AppContext, type AppStoreProps } from "~/store";
-import { globalState } from "~/components/ui/state";
+import ShoppingBagIcon from '@heroicons/react/24/outline/ShoppingBagIcon';
+import UserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon';
+import { signOut } from 'next-auth/react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { cn, removeTrailingSlashes } from '~/lib/utils';
+import { useContext } from 'react';
+import { useStore } from 'zustand';
+import { AppContext, type AppStoreProps } from '~/store';
+import { globalState } from '~/components/ui/state';
 
 export function CartIconWithQtyIndicator({ className }: { className?: string }) {
-  const [cart, setCart] = globalState("cart");
+  const [ cart, setCart ] = globalState('cart');
   return (
-    <div className={cn("ml-4 mr-4 flow-root lg:ml-6", className)}>
+    <div className={cn('ml-4 mr-4 flow-root lg:ml-6', className)}>
       <Link
         href="/panier"
         className="group relative -m-2 flex items-center p-2"
@@ -23,7 +22,8 @@ export function CartIconWithQtyIndicator({ className }: { className?: string }) 
           aria-hidden="true"
         />
         {cart?.items?.length ? (
-          <span className="top right absolute right-0 top-0 m-0 h-4 w-4 rounded-full bg-red-600 p-0 text-center font-mono text-sm leading-tight text-white">
+          <span
+            className="top right absolute right-0 top-0 m-0 h-4 w-4 rounded-full bg-red-600 p-0 text-center font-mono text-sm leading-tight text-white">
             {cart?.items?.length ?? 0}
           </span>
         ) : null}
@@ -32,6 +32,7 @@ export function CartIconWithQtyIndicator({ className }: { className?: string }) 
     </div>
   );
 }
+
 export const LogoutBtn = ({
   withText = false,
   className,
@@ -40,15 +41,15 @@ export const LogoutBtn = ({
   className?: string;
 }) => {
   const store = useContext(AppContext);
-  if (!store) throw new Error("Missing AppContext.Provider in the tree");
+  if (!store) throw new Error('Missing AppContext.Provider in the tree');
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
   return (
     <>
       <button
         className={cn(
           `relative flex text-slate-400 hover:text-slate-600 focus:text-slate-600 ${withText
-            ? "text-black"
-            : "ml-2 rounded-full p-3 hover:bg-red-50 focus:bg-red-100 focus:ring-2 focus:ring-red-100 focus:ring-offset-2"
+            ? 'text-black'
+            : 'ml-2 rounded-full p-3 hover:bg-red-50 focus:bg-red-100 focus:ring-2 focus:ring-red-100 focus:ring-offset-2'
           }`,
           className,
         )}
@@ -80,12 +81,12 @@ export const LogoutBtn = ({
 };
 export const LoginBtn = ({ className }: { className?: string }) => {
   const store = useContext(AppContext);
-  if (!store) throw new Error("Missing AppContext.Provider in the tree");
+  if (!store) throw new Error('Missing AppContext.Provider in the tree');
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
   return (
     <Link
-      href={`${removeTrailingSlashes(appStore.URL)}/login?callbackUrl=${appStore.URL ? encodeURIComponent(appStore.URL) : ""}`}
-      className={cn("ml-4 flex whitespace-nowrap", className)}
+      href={`${removeTrailingSlashes(appStore.URL)}/login?callbackUrl=${appStore.URL ? encodeURIComponent(appStore.URL) : ''}`}
+      className={cn('ml-4 flex whitespace-nowrap', className)}
     >
       Se connecter
       <svg
@@ -105,12 +106,12 @@ export const LoginBtn = ({ className }: { className?: string }) => {
   );
 };
 
-type ProfileBlockVariant = "large" | "small";
+type ProfileBlockVariant = 'large' | 'small';
 
 export function ProfileBlock({
   session,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  variant = "large",
+  variant = 'large',
   link = true,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   size = 24,
@@ -124,10 +125,10 @@ export function ProfileBlock({
   className?: string;
 }) {
   const initials = (session as any)?.user?.name
-    ?.split(" ")
+    ?.split(' ')
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     .map((n) => n[0])
-    .join("")
+    .join('')
     .toUpperCase();
   return (session as any)?.user?.name ? (
     <>
@@ -138,7 +139,7 @@ export function ProfileBlock({
             `relative ml-2 flex rounded-full border p-1 px-3 text-slate-400 shadow-sm hover:bg-slate-50 hover:text-slate-600 focus:bg-slate-100 focus:text-slate-600 focus:ring-2 focus:ring-slate-100 focus:ring-offset-2`,
             className,
           )}
-        // signOut
+          // signOut
         >
           <span className="sr-only">Profil</span>
           <UserCircleIcon
@@ -181,11 +182,11 @@ export function ProfileBlock({
 
 export function SiteLogo({ className }: { className?: string }) {
   const store = useContext(AppContext);
-  if (!store) throw new Error("Missing AppContext.Provider in the tree");
+  if (!store) throw new Error('Missing AppContext.Provider in the tree');
   const appStore = useStore(store, (s: AppStoreProps) => s.APP);
   return (
     <Link
-      className={cn("-m-1.5 p-1.5", className)}
+      className={cn('-m-1.5 p-1.5', className)}
       href="/"
     >
       <span className="sr-only">{appStore.BRAND}</span>
