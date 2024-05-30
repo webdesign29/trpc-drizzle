@@ -27,6 +27,12 @@ bun install
 cp .env.example .env.local
 ```
 
+Push le schéma de la base de données :
+
+```bash
+bun db:push
+```
+
 ### Prérequis
 
 - Node >= 20.0.0
@@ -43,7 +49,7 @@ bun run dev
 ### Commandes
 
 ```bash
-bun build      # exécute `prisma generate` + `prisma migrate` + `next build`
+bun build      # exécute
 bun db-reset   # réinitialise la base de données locale
 bun dev        # démarre next.js
 bun dx         # démarre la base de données postgres + exécute les migrations + initialise les données + démarre next.js
@@ -67,4 +73,12 @@ const dataRaw = await api.example.getAll();
 import { api } from '~/trpc/react';
 
 const { data, isLoading, refetch } = api.example.getAll.useQuery();
+```
+
+Utilisation de Drizzle :
+
+```bash
+bun db:push # pour push le schéma de la base de données
+bun db:pull # pour pull le schéma de la base de données
+bun db:generate # pour générer les fichiers de migration
 ```
