@@ -7,7 +7,7 @@ import { cn, removeTrailingSlashes } from '~/lib/utils';
 import { useContext } from 'react';
 import { useStore } from 'zustand';
 import { AppContext, type AppStoreProps } from '~/store';
-import { globalState } from '~/components/ui/state';
+import { globalState } from '@/components/ui/state';
 
 export function CartIconWithQtyIndicator({ className }: { className?: string }) {
   const [ cart, setCart ] = globalState('cart');

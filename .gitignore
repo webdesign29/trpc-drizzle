@@ -45,3 +45,4 @@ playwright/test-results
 # IDE
 .idea
 .dev
+.eslintcache

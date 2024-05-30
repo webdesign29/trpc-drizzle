@@ -1,5 +1,4 @@
 export { drizzle } from "drizzle-orm/postgres-js";
-export * as schema from "../../drizzle/schema";
 import postgres from "postgres";
 
 const connectionString = process.env.DATABASE_URL;

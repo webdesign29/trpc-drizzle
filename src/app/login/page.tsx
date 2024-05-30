@@ -1,8 +1,6 @@
 import React from 'react';
 import { default as LoginPage } from '../_components_/login/index';
 
-const Page = () => {
+export default async function() {
   return <LoginPage />;
-};
-
-export default Page;
+}

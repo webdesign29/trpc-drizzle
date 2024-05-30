@@ -4,7 +4,7 @@
 
 - 🧙‍♂️ E2E typesafety with [tRPC](https://trpc.io)
 - ⚡ Full-stack React with Next.js
-- ⚡ Database with Prisma
+- ⚡ Database with Drizzle
 - ⚙️ VSCode extensions
 - 🎨 ESLint + Prettier
 - 💚 CI setup using GitHub Actions:
@@ -15,10 +15,7 @@
 ## Setup
 
 ```bash
-pnpm create next-app --example https://github.com/trpc/trpc --example-path examples/next-prisma-starter trpc-prisma-starter
-cd trpc-prisma-starter
-pnpm
-pnpm dx
+bun install
 ```
 
 ### Requirements
@@ -31,23 +28,20 @@ pnpm dx
 ### Start project
 
 ```bash
-pnpm create next-app --example https://github.com/trpc/trpc --example-path examples/next-prisma-starter trpc-prisma-starter
-cd trpc-prisma-starter
-pnpm
-pnpm dx
+bun run dev
 ```
 
 ### Commands
 
 ```bash
-pnpm build      # runs `prisma generate` + `prisma migrate` + `next build`
-pnpm db-reset   # resets local db
-pnpm dev        # starts next.js
-pnpm dx         # starts postgres db + runs migrations + seeds + starts next.js
-pnpm test-dev   # runs e2e tests on dev
-pnpm test-start # runs e2e + unit tests
-pnpm test-unit  # runs normal Vitest unit tests
-pnpm test-e2e   # runs e2e tests
+bun build      # runs `prisma generate` + `prisma migrate` + `next build`
+bun db-reset   # resets local db
+bun dev        # starts next.js
+bun dx         # starts postgres db + runs migrations + seeds + starts next.js
+bun test-dev   # runs e2e tests on dev
+bun test-start # runs e2e + unit tests
+bun test-unit  # runs normal Vitest unit tests
+bun test-e2e   # runs e2e tests
 ```
 
 ## Deployment

@@ -1,6 +1,7 @@
 'use client';
-import { Session } from 'next-auth/core/types';
+import { Session } from 'next-auth';
 import React, { createContext, useContext, useState } from 'react';
+import { api } from '~/trpc/react';
 
 const SessionContext = createContext<{
   data: Session | undefined | null;
@@ -11,12 +12,9 @@ const SessionContext = createContext<{
 }>({
   data: undefined,
   isLoading: false,
-  login: () => {
-  },
-  logout: () => {
-  },
-  refetch: () => {
-  },
+  login: () => void 0,
+  logout: () => void 0,
+  refetch: () => void 0,
 });
 
 export const useSession = () => {
@@ -34,10 +32,10 @@ export const AppSessionProvider = ({ children }) => {
     },
   });
   // const { data, isLoading, refetch } = api.auth.getSession.useQuery(undefined, {
-  //   cacheTime: 10000,
+  //   // cacheTime: 10000,
   // });
 
-  const data = {} as Session;
+  const data = null as Session | null;
   const isLoading = false;
 
   const refetchSession = async () => {

@@ -1,12 +1,16 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
-import * as schemas from '../../../drizzle/schema.ts'
+import * as schema from '../../../drizzle/schema.ts'
 import * as relations from '../../../drizzle/relations.ts'
 import { client } from '~/server/drizzle.ts';
 
+export {
+  schema,
+  relations
+}
+
 export const db = drizzle(client, {
   schema: {
-    ...schemas,
+    ...schema,
     ...relations
   }
 });

@@ -12,6 +12,7 @@ import { type NextRequest } from 'next/server';
 import trpcOptions from './trpc-options';
 import { Session } from 'next-auth';
 import { auth } from '~/server/auth.ts';
+import { db } from '~/server/db';
 
 /**
  * 1. CONTEXT
@@ -62,7 +63,7 @@ export const createTRPCContext = async (opts: {
   const session = opts.session ?? (await auth());
 
   return {
-    // db,
+    db,
     ...opts,
     session,
   };

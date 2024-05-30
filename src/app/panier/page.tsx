@@ -1,7 +1,7 @@
 import React from 'react';
-import CheckoutSteps from '~/components/features/checkout/steps';
-import Footer from '~/components/features/footer';
-import Cart from '~/components/features/cart';
+import CheckoutSteps from '@/components/features/checkout/steps';
+import Footer from '@/components/features/footer';
+import Cart from '@/components/features/cart';
 
 
 const Page = () => {

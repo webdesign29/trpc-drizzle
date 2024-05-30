@@ -5,6 +5,7 @@ import { TRPCReactProvider } from '~/trpc/react';
 import { AppSessionProvider } from './sessions';
 import LayoutClient from './layoutClient';
 import { headers } from 'next/headers';
+import { SiteHeader } from '~/app/_components_/site-header.tsx';
 
 const inter = Inter({
   subsets: [ 'latin' ],
@@ -28,7 +29,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       {/* <TRPCReactProvider cookies={cookies().toString()}> */}
       <TRPCReactProvider>
-        <AppSessionProvider>{children}</AppSessionProvider>
+        <AppSessionProvider>
+          <SiteHeader />
+          {children}
+        </AppSessionProvider>
       </TRPCReactProvider>
       <Toaster richColors />
     </LayoutClient>

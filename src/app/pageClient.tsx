@@ -18,6 +18,9 @@ export default function ClientPageComponent() {
           {JSON.stringify(exampleData, null, 2)}
         </pre>
       </section>
+
+      <hr className="my-2" />
+
       <section className="flex flex-col items-center justify-center w-full">
         <pre>
           {JSON.stringify(appStore, null, 2)}

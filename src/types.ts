@@ -15,6 +15,15 @@ export type AppProps = {
     };
     BRAND: string;
     LOGO: string;
+    MAIN_NAV: {
+      title: string;
+      children: {
+        title: string;
+        href: string;
+        description: string;
+        items: any[];
+      }[];
+    }[];
   };
 };
 

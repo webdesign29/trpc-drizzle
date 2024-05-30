@@ -2,7 +2,7 @@
 import { useContext, useEffect } from 'react';
 import Hamburger from 'hamburger-react';
 import { useSession } from '../../../sessions';
-import { Button } from '~/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { can } from '~/utils/roles';
 import { LoginBtn, LogoutBtn, ProfileBlock, SiteLogo } from './fragments';
 import { UserSwitcher } from '../../../../components/ui/header/load-user-switcher';

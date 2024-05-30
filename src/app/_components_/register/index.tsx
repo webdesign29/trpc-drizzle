@@ -1,25 +1,47 @@
 'use client';
 import Link from 'next/link';
-import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '~/components/ui/form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { DisplayFormErrors } from '../display-errors';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod/dist/zod';
 
-import { z } from 'zod';
-
-export const FormSchema = z.object({
-  username: z.string().min(3).max(20),
-  email: z.string().email(),
-});
+import CSRFToken from '~/utils/CSRFToken.tsx';
+import { useState } from 'react';
+import { RegisterData, RegisterSchema } from '~/schema/auth.ts';
+import { api } from '~/trpc/react.tsx';
+import { toast } from 'sonner';
+import { useRouter } from 'next/router';
 
 export default function Page() {
-  const form = useForm<z.input<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const router = useRouter();
+  const [ isLoading, setIsLoading ] = useState<boolean>(false);
+  const registerMutation = api.auth.register.useMutation({
+    onSuccess: () => {
+      toast.success('Votre compte a été créé avec succès');
+      router.push('/login');
+    },
+    onError: (error) => {
+      console.log('error: ', error);
+      toast.error(
+        'Une erreur s\'est produite lors de la création de votre compte'
+      );
+    },
   });
 
-  async function onSubmit(data: z.input<typeof FormSchema>) {
+  const form = useForm<RegisterData>({
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      firstName: 'client1',
+      lastName: 'client1',
+      email: 'client1@webdesign29.net',
+      password: 'totololo',
+      confirmPassword: 'totololo',
+    }
+  });
+
+  async function onSubmit(data: RegisterData) {
     console.log('data', data);
     // const res = await doExport.mutateAsync(data);
     // if (res) {
@@ -32,18 +54,16 @@ export default function Page() {
     //     window.open(res.filePath);
     //   }
     // }
+    registerMutation.mutate({
+      password: data.password,
+      email: data.email,
+      first_name: data.firstName,
+      last_name: data.lastName,
+    });
   }
 
   return (
     <>
-      {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-gray-50">
-          <body class="h-full">
-          ```
-        */}
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/">
@@ -58,102 +78,132 @@ export default function Page() {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={`flex flex-col bg-white shadow-inner`}
+                className={`flex flex-col bg-white`}
               >
-                <DisplayFormErrors errors={form?.formState?.errors} />
-                <div className="flex flex-col space-y-2 px-4">
+                <CSRFToken />
+                {/*<DisplayFormErrors errors={form?.formState?.errors} />*/}
+                <div className="flex flex-col space-y-2">
+
                   <FormField
-                    name="email"
+                    control={form.control}
+                    name="firstName"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>
+                          {/*First Name*/}
+                          Prénom
+                        </FormLabel>
                         <FormControl>
-                          <Input
-                            title="Votre email"
-                            placeholder="Saisissez votre adresse email"
-                            {...field}
-                            autoComplete="email"
-                            value={field?.value || ''}
-                          />
+                          <Input placeholder="John"
+                                 autoCapitalize="none"
+                                 autoComplete="username"
+                                 autoCorrect="off"
+                                 disabled={isLoading}
+                                 {...field} />
                         </FormControl>
-
-                        <FormMessage />
+                        <FormMessage/>
                       </FormItem>
                     )}
                   />
                   <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {/*Last Name*/}
+                          Nom
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="Doe"
+                                 autoCapitalize="none"
+                                 autoComplete="username"
+                                 autoCorrect="off"
+                                 disabled={isLoading}
+                                 {...field} />
+                        </FormControl>
+                        <FormMessage/>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Email
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="name@example.com"
+                                 type="email"
+                                 autoCapitalize="none"
+                                 autoCorrect="off"
+                                 autoComplete="email"
+                                 disabled={isLoading}
+                                 {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Nous enverrons un email de confirmation à cette adresse.
+                        </FormDescription>
+                        <FormMessage/>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>
+                          Mot de passe
+                        </FormLabel>
                         <FormControl>
-                          <Input
-                            title="Mot de passe"
-                            placeholder="**********"
-                            autoComplete="current-password"
-                            {...field}
-                            value={field?.value || ''}
-                          />
+                          <Input placeholder="Créer un mot de passe de 6 caractères minimum"
+                                 type="password"
+                                 autoCorrect="off"
+                                 disabled={isLoading}
+                                 {...field} />
                         </FormControl>
-
-                        <FormMessage />
+                        <FormMessage/>
                       </FormItem>
                     )}
                   />
-                </div>
-                {/* <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Email address
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Confirmer le mot de passe
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="Confirmer votre mot de passe"
+                                 type="password"
+                                 autoCorrect="off"
+                                 disabled={isLoading}
+                                 {...field} />
+                        </FormControl>
+                        <FormMessage/>
+                      </FormItem>
+                    )}
                   />
-                </div>
-              </div> */}
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <label
-                      htmlFor="remember-me"
-                      className="ml-3 block text-sm leading-6 text-gray-900"
-                    >
-                      Remember me
-                    </label>
-                  </div>
-
-                  <div className="text-sm leading-6">
-                    <Link
-                      href="/mot-de-passe-oublie"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      Mot de passe oublié ?
-                    </Link>
-                  </div>
                 </div>
 
                 <div>
                   <Button
+                    disabled={isLoading}
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
+                    {isLoading && (
+                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
+                    )}
                     Créer un compte
                   </Button>
                 </div>
