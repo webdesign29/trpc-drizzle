@@ -11,23 +11,26 @@ export default async function Home() {
         TRPC.</p>
     </div>
 
-    <div className="flex flex-col items-center justify-center w-full">
-      <h2>
-        Data from the server
-      </h2>
-      <pre>
-        {JSON.stringify(data, null, 2)}
-      </pre>
-    </div>
+    <div className="container mx-auto mt-12 flex space-x-4">
+      <div className="shadow border rounded w-1/2">
+        <h2 className="text-center text-xl font-medium mb-4">
+          Data from the server
+        </h2>
+        <pre>
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </div>
 
-    <hr className="my-2" />
+      <hr className="my-2" />
 
-    <div className="container mx-auto">
-      <h2>
-        Data from the client
-      </h2>
-
-      <ClientPageComponent />
+      <div className="shadow border rounded w-1/2">
+        <h2 className="text-center text-xl font-medium mb-4">
+          Data from the client
+        </h2>
+        <div className='p-4'>
+          <ClientPageComponent />
+        </div>
+      </div>
     </div>
   </>;
 }

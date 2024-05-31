@@ -18,7 +18,7 @@ export const createAppStore = (initProps?: Partial<AppProps>) => {
   return createStore<AppStoreProps>()((set) => ({
     ...initialState,
     APP: {
-      NAME: "App Name",
+      NAME: "Nom de l'application",
       setName: (name: string) => set((state) => ({ APP: { ...state.APP, NAME: name } })),
       URL: "https://example.com",
       THEME: {
@@ -29,27 +29,16 @@ export const createAppStore = (initProps?: Partial<AppProps>) => {
 
       MAIN_NAV: [
         {
-          title: "Home things",
-          children: [
-            {
-              title: "Home",
-              href: "/",
-              description: "Go back to the homepage.",
-              items: [],
-            },
-            {
-              title: "Films",
-              href: "/search/movies",
-              description: "Browse all the films we have.",
-              items: [],
-            },
-            {
-              title: "TV Series",
-              href: "/search/tv-shows",
-              description: "Browse all the TV series we have.",
-              items: [],
-            },
-          ],
+          title: "Acceuil",
+          href: "/",
+        },
+        {
+          title: "Acceuil",
+          href: "/",
+        },
+        {
+          title: "Configurateur",
+          href: "/builder",
         },
         {
           title: "Utils",
@@ -91,10 +80,6 @@ export const createAppStore = (initProps?: Partial<AppProps>) => {
               items: [],
             },
           ],
-        },
-        {
-          title: "Test route",
-          href: "/test",
         }
       ],
 

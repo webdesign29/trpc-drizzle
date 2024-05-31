@@ -316,9 +316,6 @@ export default function LoginPage() {
                                  disabled={isLoading}
                                  {...field} />
                         </FormControl>
-                        <FormDescription>
-                          Nous enverrons un email de confirmation à cette adresse.
-                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -379,7 +376,7 @@ export default function LoginPage() {
                     {isLoading && (
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    Créer un compte
+                    Se connecter
                   </Button>
                 </div>
 
